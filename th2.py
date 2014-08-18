@@ -10,8 +10,9 @@ DESCRIPTION:
 """
 
 import numpy as np
+from matplotlib import pyplot as plt
 
-def th2(aSmooth, th2Val):
+def aboveTh2(aSmooth, th2Val, plot = False):
 
 	"""
 	Returns the index of the first sample that exceeded the mov avg threshold.
@@ -32,18 +33,34 @@ def th2(aSmooth, th2Val):
 	# Make sure the program doesn't crash if onset cannot be calculated:
 	if len(np.where(aSmooth > th2Val)[0]) == 0:
 		iTh2Exceeded = None
-		print "The moving-window-average signal never exceeded the threshold. The onset is set to None.",
+		print "Th2 was never exceeded. The onset is set to None.",
 		return iTh2Exceeded
 
 	iTh2Exceeded = int(np.where(aSmooth> th2Val)[0][0])
 	
-	#from matplotlib import pyplot as plt
-	#plt.axhline(th2Val, color = 'green', linewidth = 3)
-
+	if plot:
+		plt.subplot(212)
+		plt.plot(aSmooth, color = 'orange')
+		plt.axhline(th2Val, color = "blue")
+		plt.xlim((0, len(aSmooth)))
+	
 	return iTh2Exceeded
 
+def belowTh2(aSmooth, th2Val):
+	
+	# Make sure the program doesn't crash if onset cannot be calculated:
+	if len(np.where(aSmooth > th2Val)[0]) == 0:
+		iTh2Exceeded = None
+		print "Th2 was never exceeded. The onset is set to None.",
+		return iBelow
 
-def onsetSample(aLog, aSmooth, th2Val, winWidth):
+	iBelow = int(np.where(aSmooth< th2Val)[0][0])
+	
+	return iBelow
+	
+
+
+def onsetSample(aLog, aSmooth, th2Val, winWidth, plot = False):
 
 	"""
 	Returns the onset of a given signal as detected by the algorithm.
@@ -61,12 +78,7 @@ def onsetSample(aLog, aSmooth, th2Val, winWidth):
 
 	# Determine the first sample where the smoothed signal exceeded th2
 	
-	iTh2Exceeded = th2(aSmooth.copy(), th2Val)
-
-	#from matplotlib import pyplot as plt
-	#plt.axvline(iTh2Exceeded,color = 'green', linewidth = 3)
-	#plt.show()
-
+	iTh2Exceeded = aboveTh2(aSmooth.copy(), th2Val, plot = plot)
 
 	# If th2 was never exceeded, return None:
 	if iTh2Exceeded == None:
@@ -83,6 +95,8 @@ def onsetSample(aLog, aSmooth, th2Val, winWidth):
 
 	# Determine the index of this sample relative to the whole array:
 	onset = iTh2Exceeded + iStartWin
+
+
 
 	return onset
 

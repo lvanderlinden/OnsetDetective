@@ -10,6 +10,7 @@ if the threshold is not exceeded.
 """
 
 import numpy as np
+from matplotlib import pyplot as plt
 
 def getTh1Val(aTkeo, k, iStartBaseline, iEndBaseline):
 	
@@ -37,7 +38,7 @@ def getTh1Val(aTkeo, k, iStartBaseline, iEndBaseline):
 	
 	return th1Val
 
-def applyTh1(aTkeo, k, iStartBaseline, iEndBaseline):
+def applyTh1(aTkeo, k, iStartBaseline, iEndBaseline, plot = False):
 
 	"""
 	Returns the logistic signal after applying a threshold to the tkeo signal.
@@ -54,13 +55,16 @@ def applyTh1(aTkeo, k, iStartBaseline, iEndBaseline):
 	# Determine the threshold:
 	th1Val = getTh1Val(aTkeo, k, iStartBaseline, iEndBaseline)
 
+	# Apply threshold
 	aLog = aTkeo > th1Val
 
-	#from matplotlib import pyplot as plt
-	#plt.plot(aLog, color = 'yellow', alpha = .5)
-	#plt.plot(aTkeo)
-	#plt.axhline(th1Val, color = 'red')
-	##plt.show()
+	if plot:
+		plt.subplot(211)
+		plt.plot(aTkeo)
+		plt.axvline(iStartBaseline, color = "gray", linestyle = "--")
+		plt.axvline(iEndBaseline, color = "gray", linestyle = "--")
+		plt.axhline(th1Val, color = "red")
+		plt.xlim((0, len(aTkeo)))
 
 	return aLog
 

@@ -9,6 +9,8 @@ containing the smoothed signal is returned.
 """
 
 import numpy as np
+from matplotlib import pyplot as plt
+
 
 def movWin(aLog, winWidth):
 
@@ -34,8 +36,6 @@ def movWin(aLog, winWidth):
 		t = aLog[i-winWidth/2:i+winWidth/2].mean()
 		aSmooth[i] = t
 
-	from matplotlib import pyplot as plt
-	plt.plot(aSmooth, color = 'orange', linewidth = 3)
 
 	return aSmooth
 
