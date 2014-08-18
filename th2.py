@@ -77,7 +77,7 @@ def stimLocked(aLog, aSmooth, th2Val, winWidth, plot = False):
 	# Determine the first sample where the smoothed signal exceeded th2
 	
 
-	iTh2Exceeded = aboveTh2(aSmooth.copy(), th2Val, plot = plot)
+	iTh2Exceeded = aboveTh2(aSmooth.copy(), th2Val)
 
 	# If th2 was never exceeded, return None:
 	if iTh2Exceeded == None:
@@ -137,8 +137,14 @@ def respLocked(aLog, aSmooth, th2Val, winWidth, plot = False):
 	aSmoothSliced = aSmooth[firstSampleAboveTh2:]
 	aLogSliced = aLog[firstSampleAboveTh2:]
 	
+	startVal = aSmoothSliced[0]
+	th2Val = startVal - (startVal*.1)
+	
+
 	# Find first sample below th2:
 	firstSampleBelowTh2= belowTh2(aSmoothSliced, th2Val)
+	print "first sample below = ", firstSampleBelowTh2
+	
 	
 	# If there was no sample below th2, return None:
 	if firstSampleBelowTh2 == None:
@@ -146,25 +152,27 @@ def respLocked(aLog, aSmooth, th2Val, winWidth, plot = False):
 		return onset
 
 	# Determine the window around the first sample that exceeded th2:
-	iStartWin = firstSampleBelowTh2 - winWidth/2 # first sample of the window slice
-	iEndWin = firstSampleBelowTh2 + winWidth/2 # last sample of the window slice
+	#iStartWin = firstSampleBelowTh2 - winWidth/2 # first sample of the window slice
+	#iEndWin = firstSampleBelowTh2 + winWidth/2 # last sample of the window slice
 	
 
 	# Determine the first sample within the window-slice for which th1 was
 	# exceeded:
-	firstSampleBelowTh1 = int(np.where(aLogSliced[iStartWin:iEndWin] == 0)[0][0])
+	#firstSampleBelowTh1 = int(np.where(aLogSliced[iStartWin:iEndWin] == 0)[0][0])
 	# Determine the index of this sample relative to the whole array:
-	onset = firstSampleAboveTh2 + iStartWin + firstSampleBelowTh1
+	#onset = firstSampleAboveTh2 + iStartWin + firstSampleBelowTh1
+	onset = firstSampleBelowTh2+firstSampleAboveTh2
 
 	if plot:
 		plt.subplot(312)
 		plt.plot(aLogSliced, color = "yellow")
 		plt.plot(aSmoothSliced, color = 'orange')
 		plt.axhline(th2Val, color = "blue")
+		plt.axhline(startVal, color = "red", linewidth = 2)
 		plt.axvline(firstSampleBelowTh2, color = "green", label = "below th2")
-		plt.axvline(firstSampleBelowTh1 + iStartWin, color = "red", label = "below th1")
-		plt.axvline(iStartWin, color = "gray")
-		plt.axvline(iEndWin, color = "gray")
+		#plt.axvline(firstSampleBelowTh1 + iStartWin, color = "red", label = "below th1")
+		#plt.axvline(iStartWin, color = "gray")
+		#plt.axvline(iEndWin, color = "gray")
 		#plt.axvline(onset, color = "orange", label = "onset", linewidth = 2)
 		plt.legend()
 		plt.xticks([])
