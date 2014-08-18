@@ -27,13 +27,13 @@ for pp in os.listdir(src):
 
 				a = np.fromfile(fPath, dtype = np.float32)
 				aTkeo = OnsetDetective.tkeo.tkeo(a)
-				aTkeo2 = OnsetDetective.tkeo.tkeo2(a)
-				#plt.plot(a, color = blue[1], alpha = .5)
 				plt.plot(aTkeo, color = blue[2])
-				plt.plot(aTkeo2, color = red[2])
-				onset = OnsetDetective.onsetDetective.onset(a)
+				onset1 = OnsetDetective.onsetDetective.stimLockedOnset(a, plot = False)
+				onset2 = OnsetDetective.onsetDetective.respLockedOnset(a, plot = False)
 				#print onset
-				plt.axvline(onset, color = "red")
+				
+				plt.axvline(onset1, color = "red")
+				plt.axvline(onset2, color = "red")
 				plt.show()
 
 
