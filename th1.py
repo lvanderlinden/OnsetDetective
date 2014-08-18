@@ -59,12 +59,13 @@ def applyTh1(aTkeo, k, iStartBaseline, iEndBaseline, plot = False):
 	aLog = aTkeo > th1Val
 
 	if plot:
-		plt.subplot(211)
+		plt.subplot(311)
 		plt.plot(aTkeo)
 		plt.axvline(iStartBaseline, color = "gray", linestyle = "--")
 		plt.axvline(iEndBaseline, color = "gray", linestyle = "--")
 		plt.axhline(th1Val, color = "red")
 		plt.xlim((0, len(aTkeo)))
+		plt.xticks([])
 
 	return aLog
 
