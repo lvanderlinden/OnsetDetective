@@ -11,7 +11,7 @@ import numpy as np
 # Import OnsetDetective modules:
 import tkeo, th1, movWin, th2
 
-def onset(a, method, k = 12, winWidth = 50, th2Val = .35, th2PercStart = .1,\
+def onset(a, method, k = 1500, winWidth = 100, th2Val = .35, th2PercStart = .1,\
 	iStartBaseline = 0, \
 	iEndBaseline = 300, convertToTkeo=True, plot = False):
 	

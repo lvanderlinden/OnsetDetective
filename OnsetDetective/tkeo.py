@@ -13,7 +13,8 @@ import numpy as np
 def tkeo(a):
 
 	"""
-	Calculates the TKEO of a given recording.
+	Calculates the TKEO of a given recording by using 2 samples.
+	See Li et al., 2007
 
 	Arguments:
 	a 			--- 1D numpy array.
@@ -35,7 +36,8 @@ def tkeo(a):
 def tkeo2(a):
 
 	"""
-	Calculates the TKEO of a given recording.
+	Calculates the TKEO of a given recording by using four samples.
+	See Deburchgrave et al., 2008
 
 	Arguments:
 	a 			--- 1D numpy array.

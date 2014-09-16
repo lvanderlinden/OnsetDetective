@@ -147,18 +147,13 @@ def respLocked(aLog, aSmooth, th2Val, winWidth, th2PercStart = None,
 	aSmoothSliced = aSmooth[firstSampleAboveTh2:]
 	aLogSliced = aLog[firstSampleAboveTh2:]
 	
-	print "perc = ", th2PercStart
+	# Threshold is set such that signal should be below a certain percentage
+	# of the starting value:
 	startVal = aSmoothSliced[0]
-	print "startVal = ", startVal
-	#th2Val = startVal - (startVal*th2PercStart)
 	th2Val = startVal * th2PercStart
-	print "th2Val = ", th2Val
-	
 
 	# Find first sample below th2:
 	firstSampleBelowTh2= belowTh2(aSmoothSliced, th2Val)
-	print "first sample below = ", firstSampleBelowTh2
-	
 	
 	# If there was no sample below th2, return None:
 	if firstSampleBelowTh2 == None:
@@ -174,10 +169,6 @@ def respLocked(aLog, aSmooth, th2Val, winWidth, th2PercStart = None,
 		plt.axhline(th2Val, color = "blue")
 		plt.axhline(startVal, color = "red", linewidth = 2)
 		plt.axvline(firstSampleBelowTh2, color = "green", label = "below th2")
-		#plt.axvline(firstSampleBelowTh1 + iStartWin, color = "red", label = "below th1")
-		#plt.axvline(iStartWin, color = "gray")
-		#plt.axvline(iEndWin, color = "gray")
-		#plt.axvline(onset, color = "orange", label = "onset", linewidth = 2)
 		plt.legend()
 		plt.xticks([])
 
