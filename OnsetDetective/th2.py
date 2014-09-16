@@ -96,7 +96,7 @@ def stimLocked(aLog, aSmooth, th2Val, winWidth, plot = False):
 	onset = iTh1Exceeded + iStartWin
 
 	if plot:
-		plt.subplot(212)
+		plt.subplot("312")
 		plt.plot(aSmooth, color = 'orange')
 		plt.axhline(th2Val, color = "orange")
 		plt.axvline(iTh1Exceeded, color = "blue", label = "th1 exceeded")
@@ -104,26 +104,36 @@ def stimLocked(aLog, aSmooth, th2Val, winWidth, plot = False):
 		plt.axvline(onset, color = "orange", label = "onset", linewidth = 2)
 		plt.axvline(iStartWin, color = 'gray', linestyle = "--")
 		plt.axvline(iEndWin, color = 'gray', linestyle = "--")
+		plt.xlim(0, len(aSmooth))
 		plt.legend(loc='best', frameon=False)
 		
 	return onset
 
 
-def respLocked(aLog, aSmooth, th2Val, winWidth, plot = False):
+def respLocked(aLog, aSmooth, th2Val, winWidth, th2PercStart = None,
+		plot = False):
 
 	"""
 	Returns the onset of a given signal as detected by the algorithm.
 
 	Arguments:
-	aLog		--- 1D numpy array containing log signal.
-	aSmooth 	--- 1D numpy array containing moving window average of the log 
-					signal
-    th2Val		--- threshold for the mov avg, float between 0 and 1
-	winWidth	--- width of the moving window, int.
+	aLog			--- 1D numpy array containing log signal.
+	aSmooth 		--- 1D numpy array containing moving window average of the log 
+						signal
+    th2Val			--- threshold for the mov avg, float between 0 and 1
+	winWidth		--- width of the moving window, int.
+	th2PercStart	--- Multiplier starting value moving window average, float
+						between 0 and 1
+	
 
 	Returns the onset of the signal (as sample), int (or None, if no onset was
 	detected because the thresold(s) was/were never exceeded).
 	"""
+
+	if th2PercStart == None:
+		raise Exception(\
+			"th2PerStart should be specified for response-respLocked approach")
+
 
 	# Determine the first sample where the smoothed signal exceeded th2
 	# TODO: only th2 or also th1?
@@ -137,8 +147,12 @@ def respLocked(aLog, aSmooth, th2Val, winWidth, plot = False):
 	aSmoothSliced = aSmooth[firstSampleAboveTh2:]
 	aLogSliced = aLog[firstSampleAboveTh2:]
 	
+	print "perc = ", th2PercStart
 	startVal = aSmoothSliced[0]
-	th2Val = startVal - (startVal*.1)
+	print "startVal = ", startVal
+	#th2Val = startVal - (startVal*th2PercStart)
+	th2Val = startVal * th2PercStart
+	print "th2Val = ", th2Val
 	
 
 	# Find first sample below th2:
@@ -151,20 +165,10 @@ def respLocked(aLog, aSmooth, th2Val, winWidth, plot = False):
 		onset = None
 		return onset
 
-	# Determine the window around the first sample that exceeded th2:
-	#iStartWin = firstSampleBelowTh2 - winWidth/2 # first sample of the window slice
-	#iEndWin = firstSampleBelowTh2 + winWidth/2 # last sample of the window slice
-	
-
-	# Determine the first sample within the window-slice for which th1 was
-	# exceeded:
-	#firstSampleBelowTh1 = int(np.where(aLogSliced[iStartWin:iEndWin] == 0)[0][0])
-	# Determine the index of this sample relative to the whole array:
-	#onset = firstSampleAboveTh2 + iStartWin + firstSampleBelowTh1
 	onset = firstSampleBelowTh2+firstSampleAboveTh2
 
 	if plot:
-		plt.subplot(312)
+		plt.subplot("312")
 		plt.plot(aLogSliced, color = "yellow")
 		plt.plot(aSmoothSliced, color = 'orange')
 		plt.axhline(th2Val, color = "blue")

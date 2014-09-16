@@ -1,4 +1,4 @@
-# onsetDetective
+# OnsetDetective
 
-Copyright 2013 Lotje van der Linden
+Copyright 2014 Lotje van der Linden
 

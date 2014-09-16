@@ -11,7 +11,8 @@ import numpy as np
 # Import OnsetDetective modules:
 import tkeo, th1, movWin, th2
 
-def onset(a, method, k = 12, winWidth = 50, th2Val = .35,  iStartBaseline = 0, \
+def onset(a, method, k = 12, winWidth = 50, th2Val = .35, th2PercStart = .1,\
+	iStartBaseline = 0, \
 	iEndBaseline = 300, convertToTkeo=True, plot = False):
 	
 	"""
@@ -62,6 +63,7 @@ def onset(a, method, k = 12, winWidth = 50, th2Val = .35,  iStartBaseline = 0, \
 		onset = th2.stimLocked(aLog, aSmooth, th2Val, winWidth, plot = plot)
 
 	elif method == "resp-locked":
-		onset = th2.respLocked(aLog, aSmooth, th2Val, winWidth, plot = plot)
+		onset = th2.respLocked(aLog, aSmooth, th2Val, winWidth, \
+			th2PercStart = th2PercStart, plot = plot)
 
 	return onset
